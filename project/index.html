@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hernán Sosa – Valterra Real Estate</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #C9A96E;
+      --gold-light: #E2C98A;
+      --gold-dark: #9A7A45;
+      --black: #05080f;
+      --black-2: #080c14;
+      --white: #f8f6f2;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    .serif { font-family: 'Instrument Serif', serif; font-style: italic; }
+
+    /* GLASS */
+    .glass {
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      position: relative;
+      overflow: hidden;
+    }
+    .glass::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(160deg, rgba(201,169,110,0.5) 0%, rgba(201,169,110,0.08) 40%, rgba(201,169,110,0.08) 60%, rgba(201,169,110,0.4) 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; filter: blur(12px); transform: translateY(28px); }
+      to   { opacity: 1; filter: blur(0);   transform: translateY(0); }
+    }
+    .anim-1 { animation: fadeUp 0.7s ease 0.1s both; }
+    .anim-2 { animation: fadeUp 0.7s ease 0.35s both; }
+    .anim-3 { animation: fadeUp 0.7s ease 0.6s both; }
+    .anim-4 { animation: fadeUp 0.7s ease 0.85s both; }
+    .anim-5 { animation: fadeUp 0.7s ease 1.1s both; }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      filter: blur(8px);
+      transition: opacity 0.65s ease, transform 0.65s ease, filter 0.65s ease;
+    }
+    .reveal.show { opacity: 1; transform: translateY(0); filter: blur(0); }
+
+    /* GOLD */
+    .gold { color: var(--gold); }
+    .gold-grad {
+      background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* BUTTONS */
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 32px; border-radius: 9999px;
+      font-family: 'Barlow', sans-serif; font-weight: 500; font-size: 15px;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+      color: #05080f; border: none; cursor: pointer;
+      transition: opacity .2s, transform .2s; text-decoration: none;
+    }
+    .btn-primary:hover { opacity: .88; transform: translateY(-2px); }
+
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 32px; border-radius: 9999px;
+      font-family: 'Barlow', sans-serif; font-weight: 500; font-size: 15px;
+      background: rgba(255,255,255,0.06); color: var(--white); border: none; cursor: pointer;
+      transition: opacity .2s, transform .2s; text-decoration: none;
+    }
+    .btn-outline:hover { opacity: .8; transform: translateY(-2px); }
+
+    /* BADGE */
+    .badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 5px 16px; border-radius: 9999px;
+      font-family: 'Barlow', sans-serif; font-weight: 500;
+      font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--gold-light);
+    }
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); display: inline-block; }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 2px; }
+
+    /* FORM */
+    .form-input {
+      width: 100%; background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(201,169,110,0.2); border-radius: 8px;
+      padding: 12px 16px; color: var(--white);
+      font-family: 'Barlow', sans-serif; font-size: 14px; font-weight: 300;
+      outline: none; transition: border-color .2s;
+    }
+    .form-input:focus { border-color: rgba(201,169,110,0.55); }
+    .form-input::placeholder { color: rgba(255,255,255,0.28); }
+    textarea.form-input { resize: vertical; min-height: 110px; }
+
+    /* SECTION HEADING */
+    h2.sh {
+      font-family: 'Instrument Serif', serif; font-style: italic;
+      font-size: clamp(2.4rem, 6vw, 4.4rem); line-height: .92;
+      letter-spacing: -.01em; color: var(--white);
+      text-wrap: pretty;
+    }
+
+    /* DIVIDER */
+    .divider { border: none; height: 1px; background: rgba(201,169,110,0.12); margin: 0; }
+
+    @media (max-width: 768px) {
+      .grid-2 { grid-template-columns: 1fr !important; }
+      .grid-3 { grid-template-columns: 1fr !important; }
+      .grid-4 { grid-template-columns: 1fr 1fr !important; }
+      .hide-mobile { display: none !important; }
+    }
+    @media (min-width: 769px) {
+      .hide-desktop { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════ NAVBAR ═══════════════════════ -->
+<header id="navbar" style="position:fixed;top:16px;left:0;right:0;z-index:50;padding:0 32px;display:flex;align-items:center;justify-content:space-between;">
+  <a href="#inicio" style="display:flex;align-items:center;gap:12px;text-decoration:none;">
+    <img src="uploads/logo-1777681154633.jpg" alt="Hernán Sosa" style="width:46px;height:46px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(201,169,110,0.4);" />
+    <div>
+      <div class="serif" style="font-size:17px;color:var(--gold);line-height:1;">Hernán Sosa</div>
+      <div style="font-family:'Barlow',sans-serif;font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-top:2px;">Valterra Real Estate</div>
+    </div>
+  </a>
+  <!-- Desktop nav -->
+  <nav class="glass hide-mobile" style="border-radius:9999px;padding:4px 8px;display:flex;gap:2px;align-items:center;">
+    <a href="#inicio"      class="nav-link">Inicio</a>
+    <a href="#servicios"   class="nav-link">Servicios</a>
+    <a href="#propiedades" class="nav-link">Propiedades</a>
+    <a href="#proceso"     class="nav-link">Proceso</a>
+    <a href="#contacto" class="btn-primary" style="padding:8px 20px;font-size:13px;margin-left:6px;">
+      Contactar
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.19 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.1 1.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21 16.92z"/></svg>
+    </a>
+  </nav>
+  <!-- Mobile hamburger -->
+  <button id="burger" class="hide-desktop" onclick="toggleMenu()" style="background:none;border:none;cursor:pointer;color:var(--gold);padding:4px;">
+    <svg id="burger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="glass hide-desktop" style="display:none;position:absolute;top:calc(100% + 8px);left:16px;right:16px;border-radius:16px;padding:16px;">
+    <a href="#inicio"      class="mob-link" onclick="toggleMenu()">Inicio</a>
+    <a href="#servicios"   class="mob-link" onclick="toggleMenu()">Servicios</a>
+    <a href="#propiedades" class="mob-link" onclick="toggleMenu()">Propiedades</a>
+    <a href="#proceso"     class="mob-link" onclick="toggleMenu()">Proceso</a>
+    <a href="#contacto"    class="mob-link" onclick="toggleMenu()">Contacto</a>
+    <a href="#contacto" class="btn-primary" style="display:block;text-align:center;margin-top:10px;border-radius:9999px;">Agendar llamada</a>
+  </div>
+</header>
+
+<style>
+  .nav-link {
+    padding: 8px 14px; border-radius: 9999px; font-size: 13px; font-weight: 500;
+    color: rgba(255,255,255,0.8); text-decoration: none; font-family: 'Barlow', sans-serif;
+    transition: color .2s;
+  }
+  .nav-link:hover { color: var(--gold); }
+  .mob-link {
+    display: block; padding: 11px 14px; color: rgba(255,255,255,0.82);
+    text-decoration: none; font-family: 'Barlow', sans-serif; font-size: 15px; border-radius: 8px;
+  }
+</style>
+
+<!-- ═══════════════════════ HERO ═══════════════════════ -->
+<section id="inicio" data-screen-label="01 Hero" style="position:relative;height:100vh;min-height:700px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--black);">
+  <!-- Video background -->
+  <video autoplay loop muted playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:0.55;">
+    <source src="uploads/PixVerse_V5.5_Modify_540P_se_abren_como_2_vece.mp4" type="video/mp4"/>
+  </video>
+  <!-- Dark overlay -->
+  <div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(5,8,15,0.75) 0%,rgba(5,8,15,0.35) 50%,rgba(5,8,15,0.8) 100%);z-index:1;pointer-events:none;"></div>
+  <!-- Fade bottom -->
+  <div style="position:absolute;bottom:0;left:0;right:0;height:320px;background:linear-gradient(to top,var(--black),transparent);z-index:2;pointer-events:none;"></div>
+
+  <!-- Content -->
+  <div style="position:relative;z-index:3;text-align:center;padding:0 24px;max-width:900px;width:100%;">
+    <!-- Badge -->
+    <div class="anim-1" style="display:flex;justify-content:center;margin-bottom:28px;">
+      <div class="glass badge"><span class="badge-dot"></span>CABA &amp; GBA · Valterra Real Estate</div>
+    </div>
+    <!-- Heading -->
+    <h1 class="serif anim-2" style="font-size:clamp(3rem,10vw,7.5rem);line-height:.88;color:var(--white);letter-spacing:-.02em;margin-bottom:12px;">
+      Negocios<br/>inmobiliarios
+    </h1>
+    <h1 class="serif anim-3" style="font-size:clamp(3rem,10vw,7.5rem);line-height:.88;letter-spacing:-.02em;margin-bottom:32px;">
+      <span class="gold-grad">concretos.</span>
+    </h1>
+    <!-- Subtext -->
+    <p class="anim-4" style="font-size:clamp(15px,2.4vw,18px);font-weight:300;color:rgba(255,255,255,0.6);max-width:540px;margin:0 auto 44px;line-height:1.65;">
+      Compra · Venta · Inversión. Propiedades de lujo, terrenos y rentals vacacionales en las mejores zonas de Buenos Aires.
+    </p>
+    <!-- CTAs -->
+    <div class="anim-5" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:60px;">
+      <a href="#contacto" class="btn-primary">
+        Agendar una llamada
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.19 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.1 1.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21 16.92z"/></svg>
+      </a>
+      <a href="#propiedades" class="btn-outline glass">
+        Ver propiedades
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+      </a>
+    </div>
+    <!-- Tags -->
+    <div class="anim-5" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+      <span class="glass badge">Lujo</span>
+      <span class="glass badge">Inversión</span>
+      <span class="glass badge">Rentals</span>
+      <span class="glass badge">CABA</span>
+      <span class="glass badge">GBA</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ STATS ═══════════════════════ -->
+<section data-screen-label="02 Stats" style="padding:70px 24px;background:var(--black-2);">
+  <div class="reveal" style="max-width:960px;margin:0 auto;">
+    <div class="glass" style="border-radius:24px;padding:52px 40px;">
+      <div class="grid-4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:32px;text-align:center;">
+        <div>
+          <div class="serif" style="font-size:clamp(2.4rem,5vw,3.8rem);color:var(--gold-light);line-height:1;">+15</div>
+          <div style="font-size:13px;font-weight:300;color:rgba(255,255,255,0.48);margin-top:8px;letter-spacing:.04em;">Años de experiencia</div>
+        </div>
+        <div>
+          <div class="serif" style="font-size:clamp(2.4rem,5vw,3.8rem);color:var(--gold-light);line-height:1;">200+</div>
+          <div style="font-size:13px;font-weight:300;color:rgba(255,255,255,0.48);margin-top:8px;letter-spacing:.04em;">Operaciones cerradas</div>
+        </div>
+        <div>
+          <div class="serif" style="font-size:clamp(2.4rem,5vw,3.8rem);color:var(--gold-light);line-height:1;">98%</div>
+          <div style="font-size:13px;font-weight:300;color:rgba(255,255,255,0.48);margin-top:8px;letter-spacing:.04em;">Clientes satisfechos</div>
+        </div>
+        <div>
+          <div class="serif" style="font-size:clamp(2.4rem,5vw,3.8rem);color:var(--gold-light);line-height:1;">$120M</div>
+          <div style="font-size:13px;font-weight:300;color:rgba(255,255,255,0.48);margin-top:8px;letter-spacing:.04em;">En activos gestionados</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ═══════════════════════ PROPIEDADES ═══════════════════════ -->
+<section id="propiedades" data-screen-label="03 Propiedades" style="padding:100px 24px;background:var(--black);">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div style="text-align:center;margin-bottom:60px;">
+      <div class="reveal" style="display:flex;justify-content:center;margin-bottom:18px;">
+        <div class="glass badge"><span class="badge-dot"></span>Propiedades Destacadas</div>
+      </div>
+      <h2 class="sh reveal">Exclusividad en cada <span class="gold">detalle.</span></h2>
+    </div>
+    <div class="grid-3 reveal" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;">
+
+      <!-- Card 1 -->
+      <div class="glass" style="border-radius:18px;overflow:hidden;transition:transform .3s;" onmouseenter="this.style.transform='translateY(-5px)'" onmouseleave="this.style.transform='translateY(0)'">
+        <div style="width:100%;height:210px;background:linear-gradient(135deg,rgba(30,50,90,0.6) 0%,rgba(10,16,32,0.9) 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(201,169,110,0.04) 0px,rgba(201,169,110,0.04) 1px,transparent 1px,transparent 14px);"></div>
+          <div style="text-align:center;color:rgba(201,169,110,0.45);z-index:1;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <div style="font-size:10px;margin-top:6px;font-family:'Barlow';letter-spacing:.06em;">Palermo Soho</div>
+          </div>
+        </div>
+        <div style="padding:20px 22px 26px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+            <div>
+              <div style="font-size:11px;font-weight:500;color:var(--gold);letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px;">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:3px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                Palermo · Lujo
+              </div>
+              <div class="serif" style="font-size:19px;color:var(--white);line-height:1.1;">Penthouse PH</div>
+            </div>
+            <span style="background:rgba(201,169,110,0.12);color:var(--gold);font-size:10px;font-weight:600;padding:4px 10px;border-radius:9999px;white-space:nowrap;font-family:'Barlow';letter-spacing:.06em;">Venta</span>
+          </div>
+          <div style="display:flex;gap:14px;margin-bottom:16px;">
+            <span style="font-size:12px;color:rgba(255,255,255,0.45);font-weight:300;">4 amb</span>
+            <span style="font-size:12px;color:rgba(255,255,255,0.45);font-weight:300;">280 m²</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span class="serif" style="font-size:21px;color:var(--gold-light);">USD 850.000</span>
+            <button class="glass" style="padding:8px 14px;border-radius:9999px;font-size:12px;font-family:'Barlow';font-weight:500;color:var(--white);border:none;cursor:pointer;display:flex;align-items:center;gap:5px;transition:opacity .2s;" onmouseenter="this.style.opacity='.7'" onmouseleave="this.style.opacity='1'">
+              Ver más
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="glass" style="border-radius:18px;overflow:hidden;transition:transform .3s;" onmouseenter="this.style.transform='translateY(-5px)'" onmouseleave="this.style.transform='translateY(0)'">
+        <div style="width:100%;height:210px;background:linear-gradient(135deg,rgba(20,40,70,0.7) 0%,rgba(10,16,32,0.95) 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(201,169,110,0.04) 0px,rgba(201,169,110,0.04) 1px,transparent 1px,transparent 14px);"></div>
+          <div style="text-align:center;color:rgba(201,169,110,0.45);z-index:1;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <div style="font-size:10px;margin-top:6px;font-family:'Barlow';letter-spacing:.06em;">Nordelta</div>
+          </div>
+        </div>
+        <div style="padding:20px 22px 26px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+            <div>
+              <div style="font-size:11px;font-weight:500;color:var(--gold);letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px;">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:3px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                Nordelta · Inversión
+              </div>
+              <div class="serif" style="font-size:19px;color:var(--white);line-height:1.1;">Casa Country Premium</div>
+            </div>
+            <span style="background:rgba(201,169,110,0.12);color:var(--gold);font-size:10px;font-weight:600;padding:4px 10px;border-radius:9999px;white-space:nowrap;font-family:'Barlow';letter-spacing:.06em;">Exclusivo</span>
+          </div>
+          <div style="display:flex;gap:14px;margin-bottom:16px;">
+            <span style="font-size:12px;color:rgba(255,255,255,0.45);font-weight:300;">5 amb</span>
+            <span style="font-size:12px;color:rgba(255,255,255,0.45);font-weight:300;">420 m²</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span class="serif" style="font-size:21px;color:var(--gold-light);">USD 1.200.000</span>
+            <button class="glass" style="padding:8px 14px;border-radius:9999px;font-size:12px;font-family:'Barlow';font-weight:500;color:var(--white);border:none;cursor:pointer;display:flex;align-items:center;gap:5px;transition:opacity .2s;" onmouseenter="this.style.opacity='.7'" onmouseleave="this.style.opacity='1'">
+              Ver más
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="glass" style="border-radius:18px;overflow:hidden;transition:transform .3s;" onmouseenter="this.style.transform='translateY(-5px)'" onmouseleave="this.style.transform='translateY(0)'">
+        <div style="width:100%;height:210px;background:linear-gradient(135deg,rgba(10,30,60,0.65) 0%,rgba(5,10,24,0.95) 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(201,169,110,0.04) 0px,rgba(201,169,110,0.04) 1px,transparent 1px,transparent 14px);"></div>
+          <div style="text-align:center;color:rgba(201,169,110,0.45);z-index:1;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <div style="font-size:10px;margin-top:6px;font-family:'Barlow';letter-spacing:.06em;">Puerto Madero</div>
+          </div>
+        </div>
+        <div style="padding:20px 22px 26px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+            <div>
+              <div style="font-size:11px;font-weight:500;color:var(--gold);letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px;">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:3px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                Puerto Madero
+              </div>
+              <div class="serif" style="font-size:19px;color:var(--white);line-height:1.1;">Depto. Vista al Río</div>
+            </div>
+            <span style="background:rgba(201,169,110,0.12);color:var(--gold);font-size:10px;font-weight:600;padding:4px 10px;border-radius:9999px;white-space:nowrap;font-family:'Barlow';letter-spacing:.06em;">Venta</span>
+          </div>
+          <div style="display:flex;gap:14px;margin-bottom:16px;">
+            <span style="font-size:12px;color:rgba(255,255,255,0.45);font-weight:300;">3 amb</span>
+            <span style="font-size:12px;color:rgba(255,255,255,0.45);font-weight:300;">190 m²</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span class="serif" style="font-size:21px;color:var(--gold-light);">USD 620.000</span>
+            <button class="glass" style="padding:8px 14px;border-radius:9999px;font-size:12px;font-family:'Barlow';font-weight:500;color:var(--white);border:none;cursor:pointer;display:flex;align-items:center;gap:5px;transition:opacity .2s;" onmouseenter="this.style.opacity='.7'" onmouseleave="this.style.opacity='1'">
+              Ver más
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ═══════════════════════ SERVICIOS ═══════════════════════ -->
+<section id="servicios" data-screen-label="04 Servicios" style="padding:100px 24px;background:var(--black-2);">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div style="text-align:center;margin-bottom:60px;">
+      <div class="reveal" style="display:flex;justify-content:center;margin-bottom:18px;">
+        <div class="glass badge"><span class="badge-dot"></span>¿Por qué elegirme?</div>
+      </div>
+      <h2 class="sh reveal">La diferencia está <span class="gold">en los resultados.</span></h2>
+    </div>
+    <div class="grid-2 reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+
+      <!-- Item 1: Full-width intro card -->
+      <div class="glass" style="border-radius:20px;padding:36px 32px;grid-column:span 2;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;">
+          <div>
+            <img src="uploads/logo-1777681154633.jpg" alt="Hernán Sosa" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid rgba(201,169,110,0.4);margin-bottom:20px;"/>
+            <h3 class="serif" style="font-size:clamp(1.6rem,3.5vw,2.4rem);color:var(--white);margin-bottom:12px;line-height:1.05;">Hernán Sosa,<br/>a tu servicio.</h3>
+            <p style="font-size:15px;font-weight:300;color:rgba(255,255,255,0.55);line-height:1.7;max-width:400px;">
+              Con más de 15 años en el mercado inmobiliario de Buenos Aires, me especializo en operaciones de alto valor donde la confianza, la discreción y los resultados concretos son innegociables.
+            </p>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px;">
+            <div style="display:flex;align-items:flex-start;gap:14px;">
+              <div class="glass" style="width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);flex-shrink:0;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+              </div>
+              <div>
+                <div style="font-weight:500;font-size:14px;color:var(--white);margin-bottom:3px;">Rentabilidad comprobada</div>
+                <div style="font-size:13px;font-weight:300;color:rgba(255,255,255,0.5);line-height:1.6;">Cada operación está orientada a maximizar el retorno.</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:14px;">
+              <div class="glass" style="width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);flex-shrink:0;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <div>
+                <div style="font-weight:500;font-size:14px;color:var(--white);margin-bottom:3px;">Confidencialidad total</div>
+                <div style="font-size:13px;font-weight:300;color:rgba(255,255,255,0.5);line-height:1.6;">Tu patrimonio manejado con la discreción que merece.</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:14px;">
+              <div class="glass" style="width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);flex-shrink:0;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="M21 2l-9.6 9.6"/><path d="M15.5 7.5l3 3L22 7l-3-3"/></svg>
+              </div>
+              <div>
+                <div style="font-weight:500;font-size:14px;color:var(--white);margin-bottom:3px;">Acceso exclusivo off-market</div>
+                <div style="font-size:13px;font-weight:300;color:rgba(255,255,255,0.5);line-height:1.6;">Propiedades antes de que salgan al público general.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Items 2-4 -->
+      <div class="glass" style="border-radius:20px;padding:32px 28px;">
+        <div class="glass" style="width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);margin-bottom:20px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <h3 class="serif" style="font-size:22px;color:var(--white);margin-bottom:10px;">Asesoría integral</h3>
+        <p style="font-size:14px;font-weight:300;color:rgba(255,255,255,0.52);line-height:1.7;">Desde la búsqueda hasta la escritura. Negociación, análisis legal y financiero: todo en un solo interlocutor.</p>
+      </div>
+
+      <div class="glass" style="border-radius:20px;padding:32px 28px;">
+        <div class="glass" style="width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);margin-bottom:20px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        </div>
+        <h3 class="serif" style="font-size:22px;color:var(--white);margin-bottom:10px;">Rentals &amp; Inversión</h3>
+        <p style="font-size:14px;font-weight:300;color:rgba(255,255,255,0.52);line-height:1.7;">Portafolio especializado en propiedades vacacionales y de renta. Analizamos rentabilidad antes de cada operación.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ═══════════════════════ PROCESO ═══════════════════════ -->
+<section id="proceso" data-screen-label="05 Proceso" style="padding:100px 24px;background:var(--black);">
+  <div style="max-width:900px;margin:0 auto;">
+    <div style="text-align:center;margin-bottom:60px;">
+      <div class="reveal" style="display:flex;justify-content:center;margin-bottom:18px;">
+        <div class="glass badge"><span class="badge-dot"></span>El Proceso</div>
+      </div>
+      <h2 class="sh reveal">Simple. <span class="gold">Transparente.</span> Efectivo.</h2>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:4px;">
+
+      <div class="glass reveal" style="border-radius:16px;padding:28px 32px;display:flex;gap:28px;align-items:flex-start;">
+        <div class="serif" style="font-size:52px;line-height:1;color:rgba(201,169,110,0.2);flex-shrink:0;width:58px;">01</div>
+        <div>
+          <h3 class="serif" style="font-size:23px;color:var(--white);margin-bottom:6px;">Primera consulta</h3>
+          <p style="font-size:15px;font-weight:300;color:rgba(255,255,255,0.52);line-height:1.65;">Analizamos tu situación, objetivos y presupuesto. Sin compromiso. Sin presión. Solo posibilidades reales.</p>
+        </div>
+      </div>
+
+      <div class="glass reveal" style="border-radius:16px;padding:28px 32px;display:flex;gap:28px;align-items:flex-start;">
+        <div class="serif" style="font-size:52px;line-height:1;color:rgba(201,169,110,0.2);flex-shrink:0;width:58px;">02</div>
+        <div>
+          <h3 class="serif" style="font-size:23px;color:var(--white);margin-bottom:6px;">Búsqueda estratégica</h3>
+          <p style="font-size:15px;font-weight:300;color:rgba(255,255,255,0.52);line-height:1.65;">Accedo a mi cartera exclusiva y al mercado para encontrar opciones que otros no ven, incluyendo off-market.</p>
+        </div>
+      </div>
+
+      <div class="glass reveal" style="border-radius:16px;padding:28px 32px;display:flex;gap:28px;align-items:flex-start;">
+        <div class="serif" style="font-size:52px;line-height:1;color:rgba(201,169,110,0.2);flex-shrink:0;width:58px;">03</div>
+        <div>
+          <h3 class="serif" style="font-size:23px;color:var(--white);margin-bottom:6px;">Negociación experta</h3>
+          <p style="font-size:15px;font-weight:300;color:rgba(255,255,255,0.52);line-height:1.65;">Represento tus intereses con experiencia y datos reales para obtener las mejores condiciones del mercado.</p>
+        </div>
+      </div>
+
+      <div class="glass reveal" style="border-radius:16px;padding:28px 32px;display:flex;gap:28px;align-items:flex-start;">
+        <div class="serif" style="font-size:52px;line-height:1;color:rgba(201,169,110,0.2);flex-shrink:0;width:58px;">04</div>
+        <div>
+          <h3 class="serif" style="font-size:23px;color:var(--white);margin-bottom:6px;">Cierre y escrituración</h3>
+          <p style="font-size:15px;font-weight:300;color:rgba(255,255,255,0.52);line-height:1.65;">Coordino cada detalle del proceso legal y administrativo. Vos solo tenés que firmar.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ═══════════════════════ TESTIMONIOS ═══════════════════════ -->
+<section data-screen-label="06 Testimonios" style="padding:100px 24px;background:var(--black-2);">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div style="text-align:center;margin-bottom:60px;">
+      <div class="reveal" style="display:flex;justify-content:center;margin-bottom:18px;">
+        <div class="glass badge"><span class="badge-dot"></span>Testimonios</div>
+      </div>
+      <h2 class="sh reveal">Lo que dicen <span class="gold">mis clientes.</span></h2>
+    </div>
+    <div class="grid-3 reveal" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;">
+
+      <div class="glass" style="border-radius:20px;padding:36px 30px;">
+        <div style="display:flex;gap:3px;margin-bottom:20px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#C9A96E" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#C9A96E" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#C9A96E" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#C9A96E" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#C9A96E" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <p style="font-size:15px;font-weight:300;font-style:italic;color:rgba(255,255,255,0.72);line-height:1.75;margin-bottom:24px;">"Hernán me ayudó a encontrar exactamente lo que buscaba en Nordelta. Su red de contactos y discreción hicieron toda la diferencia."</p>
+        <div>
+          <div style="font-weight:500;font-size:14px;color:var(--white);">Martín R.</div>
+          <div style="font-size:12px;font-weight:300;color:rgba(255,255,255,0.38);margin-top:2px;">Inversor privado, CABA</div>
+        </div>
+      </div>
+
+      <div class="glass" style="border-radius:20px;padding:36px 30px;">
+        <div style="display:flex;gap:3px;margin-bottom:20px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#C9A96E" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#C9A96E" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#C9A96E" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#C9A96E" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#C9A96E" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <p style="font-size:15px;font-weight:300;font-style:italic;color:rgba(255,255,255,0.72);line-height:1.75;margin-bottom:24px;">"Cerré mi primera inversión inmobiliaria con total confianza. Explicó cada paso sin tecnicismos y siempre estuvo disponible."</p>
+        <div>
+          <div style="font-weight:500;font-size:14px;color:var(--white);">Carolina S.</div>
+          <div style="font-size:12px;font-weight:300;color:rgba(255,255,255,0.38);margin-top:2px;">Empresaria, GBA Norte</div>
+        </div>
+      </div>
+
+      <div class="glass" style="border-radius:20px;padding:36px 30px;">
+        <div style="display:flex;gap:3px;margin-bottom:20px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#C9A96E" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#C9A96E" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#C9A96E" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#C9A96E" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#C9A96E" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <p style="font-size:15px;font-weight:300;font-style:italic;color:rgba(255,255,255,0.72);line-height:1.75;margin-bottom:24px;">"Vendió mi propiedad off-market antes de publicarla. Precio justo, proceso rápido y sin dolores de cabeza."</p>
+        <div>
+          <div style="font-weight:500;font-size:14px;color:var(--white);">Diego P.</div>
+          <div style="font-size:12px;font-weight:300;color:rgba(255,255,255,0.38);margin-top:2px;">Propietario, Palermo</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- ═══════════════════════ CONTACTO ═══════════════════════ -->
+<section id="contacto" data-screen-label="07 Contacto" style="padding:100px 24px 80px;background:var(--black);position:relative;overflow:hidden;">
+  <!-- Radial glow -->
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:500px;background:radial-gradient(ellipse,rgba(30,60,130,0.25) 0%,transparent 70%);pointer-events:none;"></div>
+
+  <div style="max-width:1100px;margin:0 auto;position:relative;">
+    <div style="text-align:center;margin-bottom:64px;">
+      <div class="reveal" style="display:flex;justify-content:center;margin-bottom:18px;">
+        <div class="glass badge"><span class="badge-dot"></span>Hablemos</div>
+      </div>
+      <h2 class="sh reveal" style="font-size:clamp(2.4rem,7vw,5rem);">Tu próxima operación<br/><span class="gold">empieza aquí.</span></h2>
+      <p class="reveal" style="font-size:16px;font-weight:300;color:rgba(255,255,255,0.5);margin-top:16px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.7;">Agendá una consulta gratuita. Sin compromiso, sin presión. Solo posibilidades concretas.</p>
+    </div>
+
+    <div class="grid-2 reveal" style="display:grid;grid-template-columns:1fr 1.3fr;gap:48px;align-items:start;">
+
+      <!-- Left: info -->
+      <div>
+        <img src="uploads/logo-1777681154633.jpg" alt="Hernán Sosa" style="width:96px;height:96px;border-radius:50%;object-fit:cover;border:2px solid rgba(201,169,110,0.4);margin-bottom:24px;display:block;"/>
+        <h3 class="serif" style="font-size:clamp(1.5rem,3vw,2rem);color:var(--white);line-height:1.05;margin-bottom:6px;">Hernán Sosa</h3>
+        <p style="font-size:12px;font-weight:500;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:32px;">Valterra Real Estate · CABA &amp; GBA</p>
+        <div style="display:flex;flex-direction:column;gap:20px;">
+          <div>
+            <div style="font-size:11px;font-weight:500;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;">Especialidad</div>
+            <div style="font-size:15px;font-weight:300;color:rgba(255,255,255,0.75);">Lujo · Inversión · Rentals vacacionales</div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:500;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;">Zona de operación</div>
+            <div style="font-size:15px;font-weight:300;color:rgba(255,255,255,0.75);">CABA · GBA Norte · Nordelta · Costa</div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:500;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;">Disponibilidad</div>
+            <div style="font-size:15px;font-weight:300;color:rgba(255,255,255,0.75);">Lunes a sábado · 9 a 20 hs</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: form -->
+      <div class="glass" id="contact-form-wrap" style="border-radius:22px;padding:38px 36px;">
+        <h3 class="serif" style="font-size:22px;color:var(--white);margin-bottom:24px;">Enviame un mensaje</h3>
+        <form id="contact-form" style="display:flex;flex-direction:column;gap:16px;" onsubmit="submitForm(event)">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+            <div>
+              <label style="font-size:11px;font-weight:500;color:rgba(255,255,255,0.38);letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:6px;">Nombre</label>
+              <input class="form-input" name="nombre" placeholder="Tu nombre" required/>
+            </div>
+            <div>
+              <label style="font-size:11px;font-weight:500;color:rgba(255,255,255,0.38);letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:6px;">Teléfono</label>
+              <input class="form-input" name="telefono" placeholder="+54 11 ..." />
+            </div>
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:500;color:rgba(255,255,255,0.38);letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:6px;">Email</label>
+            <input class="form-input" type="email" name="email" placeholder="tu@email.com" required/>
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:500;color:rgba(255,255,255,0.38);letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:6px;">¿Qué te interesa?</label>
+            <select class="form-input" name="interes" style="cursor:pointer;">
+              <option value="" style="background:#080c14;">Seleccioná una opción</option>
+              <option value="compra" style="background:#080c14;">Comprar una propiedad</option>
+              <option value="venta" style="background:#080c14;">Vender una propiedad</option>
+              <option value="inversion" style="background:#080c14;">Invertir en real estate</option>
+              <option value="rental" style="background:#080c14;">Propiedad vacacional / rental</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:500;color:rgba(255,255,255,0.38);letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:6px;">Mensaje (opcional)</label>
+            <textarea class="form-input" name="mensaje" placeholder="Contame más sobre lo que buscás..."></textarea>
+          </div>
+          <button type="submit" class="btn-primary" style="width:100%;justify-content:center;font-size:15px;padding:15px;">
+            Enviar consulta
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </button>
+        </form>
+        <!-- Success state -->
+        <div id="form-success" style="display:none;text-align:center;padding:48px 16px;">
+          <div class="glass" style="width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;color:var(--gold);">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <h3 class="serif" style="font-size:26px;color:var(--white);margin-bottom:10px;">¡Mensaje recibido!</h3>
+          <p style="font-size:14px;font-weight:300;color:rgba(255,255,255,0.5);line-height:1.7;">Me pondré en contacto a la brevedad.<br/>Gracias por tu consulta.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ FOOTER ═══════════════════════ -->
+<footer data-screen-label="08 Footer" style="border-top:1px solid rgba(201,169,110,0.1);padding:48px 32px;background:var(--black);">
+  <div style="max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <img src="uploads/logo-1777681154633.jpg" alt="Hernán Sosa" style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:1px solid rgba(201,169,110,0.35);"/>
+      <div>
+        <div class="serif" style="font-size:15px;color:var(--gold);">Hernán Sosa</div>
+        <div style="font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);">Valterra Real Estate</div>
+      </div>
+    </div>
+    <div style="font-size:13px;font-weight:300;color:rgba(255,255,255,0.3);text-align:center;">
+      © 2025 Hernán Sosa · Valterra Real Estate · CABA &amp; GBA
+    </div>
+    <div style="display:flex;gap:16px;">
+      <a href="#inicio" style="font-size:13px;font-weight:300;color:rgba(255,255,255,0.4);text-decoration:none;transition:color .2s;" onmouseenter="this.style.color='#C9A96E'" onmouseleave="this.style.color='rgba(255,255,255,0.4)'">Inicio</a>
+      <a href="#propiedades" style="font-size:13px;font-weight:300;color:rgba(255,255,255,0.4);text-decoration:none;transition:color .2s;" onmouseenter="this.style.color='#C9A96E'" onmouseleave="this.style.color='rgba(255,255,255,0.4)'">Propiedades</a>
+      <a href="#contacto" style="font-size:13px;font-weight:300;color:rgba(255,255,255,0.4);text-decoration:none;transition:color .2s;" onmouseenter="this.style.color='#C9A96E'" onmouseleave="this.style.color='rgba(255,255,255,0.4)'">Contacto</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ─── MOBILE MENU TOGGLE ─── */
+  var menuOpen = false;
+  function toggleMenu() {
+    menuOpen = !menuOpen;
+    var menu = document.getElementById('mobile-menu');
+    var icon = document.getElementById('burger-icon');
+    if (menu) menu.style.display = menuOpen ? 'block' : 'none';
+    if (icon) {
+      icon.innerHTML = menuOpen
+        ? '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>'
+        : '<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>';
+    }
+  }
+
+  /* ─── REVEAL ON SCROLL ─── */
+  var reveals = document.querySelectorAll('.reveal');
+  var io = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('show');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(function(el) { io.observe(el); });
+
+  /* ─── STAGGERED REVEAL FOR CHILDREN ─── */
+  var staggerParents = document.querySelectorAll('.reveal');
+  staggerParents.forEach(function(parent) {
+    var children = parent.children;
+    Array.from(children).forEach(function(child, idx) {
+      child.style.transitionDelay = (idx * 80) + 'ms';
+    });
+  });
+
+  /* ─── FORM SUBMIT ─── */
+  function submitForm(e) {
+    e.preventDefault();
+    var formEl = document.getElementById('contact-form');
+    var successEl = document.getElementById('form-success');
+    if (formEl) formEl.style.display = 'none';
+    if (successEl) successEl.style.display = 'block';
+  }
+</script>
+
+</body>
+</html>
