@@ -728,6 +728,18 @@
     if (formEl) formEl.style.display = 'none';
     if (successEl) successEl.style.display = 'block';
   }
+
+  /* ─── ALT+1 FULLSCREEN ─── */
+  document.addEventListener('keydown', function(e) {
+    if (e.altKey && e.key === '1') {
+      e.preventDefault();
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  });
 </script>
 
 </body>
